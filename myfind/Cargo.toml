@@ -6,9 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-cargo = "0.73.1"
-clap = "4.4.2"
-features = "0.10.0"
 regex = "1"
 
 [profile.release]
