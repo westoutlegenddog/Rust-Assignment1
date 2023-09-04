@@ -8,6 +8,7 @@
 3.同时⽀持匹配多个正则
 4.给输出结果去重排序
 */
+
 use regex::Regex;
 use std::env;
 use std::process;
@@ -24,14 +25,17 @@ fn main() {
     //思考一下：如果用户输入的参数太多，应该怎么样？
     //答：在这里采用多条件“或”的方式
 
+    //用循环处理所有正则表达式
     let mut counter = 2;
+    let mut all: Vec<String> = Vec::new();
+
     loop {
         if counter >= args.len() {
             break;
         }
-        eprintln!("正在处理正则表达式[{}]...", counter - 1);
+        eprintln!("\n正在处理正则表达式[{}]...", counter - 1);
         let pattern = &args[counter];
-        counter = counter + 1;
+        counter += 1;
         let regex = match Regex::new(pattern) {
             Ok(re) => re,
             Err(err) => {
@@ -45,6 +49,8 @@ fn main() {
                 if matches.is_empty() {
                     println!("未找到匹配项。");
                 } else {
+                    let mut temp: Vec<String> = matches.clone();
+                    all.append(&mut temp);
                     println!("找到以下匹配项：");
                     for file in matches {
                         println!("{}", file);
@@ -55,6 +61,15 @@ fn main() {
                 eprintln!("发生错误：{}", error);
                 process::exit(1);
             }
+        }
+    }
+
+    if !all.is_empty(){
+        all.sort();
+        all.dedup();
+        println!("\n\n合并、去重、排序后的匹配项如下：");
+        for file in all {
+            println!("{}", file);
         }
     }
     
